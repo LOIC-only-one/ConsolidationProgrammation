@@ -20,12 +20,13 @@ def main():
     server_socket.listen()
 
     print("Serveur en attente de connexion...")
-
-    while True:
-        client_socket, addr = server_socket.accept()
-        print(f"Connection from {addr} has been established!")
-        client_handler = threading.Thread(target=handle_client, args=(client_socket,))
-        client_handler.start()
-
+    try:
+        while True:
+            client_socket, addr = server_socket.accept()
+            print(f"Connection from {addr} has been established!")
+            client_handler = threading.Thread(target=handle_client, args=(client_socket,))
+            client_handler.start()
+    except KeyboardInterrupt:
+        server_socket.close()
 if __name__ == "__main__":
     main()
