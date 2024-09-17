@@ -1,18 +1,35 @@
 import socket
 import threading
 
+clients = []
+
+def broadcast(message, sender_socket):
+    """
+    Fonction pour envoyer un message à tous les clients sauf l'expéditeur.
+    """
+    for client in clients:
+        if client != sender_socket:
+            try:
+                client.sendall(message)
+            except BrokenPipeError:
+                clients.remove(client)
+
 def handle_client(client_socket):
     """
     Fonction pour gérer la communication avec un client.
     """
-    print('Connecté par', client_socket)
     while True:
-        data = client_socket.recv(1024)
-        if not data:
+        try:
+            data = client_socket.recv(1024)
+            if not data:
+                break
+            broadcast(data, client_socket)
+        except ConnectionResetError:
             break
-        print(data)
-        client_socket.sendall(data)
     client_socket.close()
+    clients.remove(client_socket)
+
+
 
 def main():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -20,13 +37,13 @@ def main():
     server_socket.listen()
 
     print("Serveur en attente de connexion...")
-    try:
-        while True:
-            client_socket, addr = server_socket.accept()
-            print(f"Connection from {addr} has been established!")
-            client_handler = threading.Thread(target=handle_client, args=(client_socket,))
-            client_handler.start()
-    except KeyboardInterrupt:
-        server_socket.close()
+
+    while True:
+        client_socket, addr = server_socket.accept()
+        clients.append(client_socket)
+        print(f"Connection from {addr} has been established!")
+        client_handler = threading.Thread(target=handle_client, args=(client_socket,))
+        client_handler.start()
+
 if __name__ == "__main__":
     main()
