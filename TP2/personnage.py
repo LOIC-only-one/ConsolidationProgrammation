@@ -42,20 +42,20 @@ class Personnage:
         """
         result = ""
         if self.initiative > autre_personnage.initiative:
-            autre_personnage.nb_vie -= 1
+            autre_personnage.nb_vie -= self.niveau
             result += f"{self.pseudo} attaque {autre_personnage.pseudo} et lui inflige 1 dégât.\n"
             if autre_personnage.nb_vie > 0:
                 self.nb_vie -= 1
                 result += f"{autre_personnage.pseudo} contre-attaque et inflige 1 dégât à {self.pseudo}.\n"
         elif self.initiative < autre_personnage.initiative:
-            self.nb_vie -= 1
+            self.nb_vie -= autre_personnage.niveau
             result += f"{autre_personnage.pseudo} attaque {self.pseudo} et lui inflige 1 dégât.\n"
             if self.nb_vie > 0:
-                autre_personnage.nb_vie -= 1
+                autre_personnage.nb_vie -= self.niveau
                 result += f"{self.pseudo} contre-attaque et inflige 1 dégât à {autre_personnage.pseudo}.\n"
         else:
-            self.nb_vie -= 1
-            autre_personnage.nb_vie -= 1
+            self.nb_vie -= autre_personnage.niveau
+            autre_personnage.nb_vie -= self.niveau
             result += f"{self.pseudo} et {autre_personnage.pseudo} attaquent en même temps et s'infligent respectivement 1 dégât.\n"
 
         if self.nb_vie <= 0:
@@ -66,6 +66,12 @@ class Personnage:
         return result
 
     def combat(self, autre_personnage) -> str:
+        """
+        Réalise un combat entre deux personnages
+        :param autre_personnage: L'autre personnage à combattre
+        :type autre_personnage: Personnage
+        """
+
         while self.nb_vie > 0 and autre_personnage.nb_vie > 0:
             self.attaque(autre_personnage)
 
