@@ -66,7 +66,13 @@ class Personnage:
         return result
 
     def combat(self, autre_personnage) -> str:
-        pass
+        while self.nb_vie > 0 and autre_personnage.nb_vie > 0:
+            self.attaque(autre_personnage)
+
+            if self.nb_vie == 0:
+                return f"{self.pseudo} a perdu le combat contre {autre_personnage.pseudo}."
+            else:
+                return f"{autre_personnage.pseudo} a perdu le combat contre {self.pseudo}."
 
     def soigne(self, autre_personnage) -> str:
         pass
@@ -89,6 +95,12 @@ def main():
     print(p2.attaque(p1))
     print(p1)
     print(p2)
+
+    p3 = Personnage("Master", niveau=5, nb_vie=20, initiative=3)
+    p4 = Personnage("Slave", niveau=4, nb_vie=18, initiative=3)
+    print(p3)
+    print(p4)
+    print(p3.combat(p4))
 
 if __name__ == "__main__":
     main()
