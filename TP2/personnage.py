@@ -71,6 +71,15 @@ class Personnage:
     def soigne(self, autre_personnage) -> str:
         pass
 
+    ## Définition des propriétés
+    @property
+    def initiative(self) -> int:
+        return self.__initiative
+    @initiative.setter
+    def initiative(self, value : int) -> None:
+        if isinstance(value, int):
+            self.__initiative = value
+
 def main():
     p1 = Personnage("Master", niveau=5, nb_vie=20, initiative=3)
     p2 = Personnage("Slave", niveau=4, nb_vie=18, initiative=3)
