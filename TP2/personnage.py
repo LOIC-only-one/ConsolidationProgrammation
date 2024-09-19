@@ -85,7 +85,13 @@ class Personnage:
         return result
 
     def soigne(self, autre_personnage) -> str:
-        pass
+        if self.nb_vie <= 0:
+            return f"{self.pseudo} est mort, il ne peut pas soigner {autre_personnage.pseudo}."
+        if autre_personnage.nb_vie <= 0:
+            return f"{autre_personnage.pseudo} est mort, il ne peut pas être soigné par {self.pseudo}."
+        
+        autre_personnage.nb_vie += self.niveau
+        self.nb_vie += self.niveau
 
     ## Définition des propriétés
     @property
