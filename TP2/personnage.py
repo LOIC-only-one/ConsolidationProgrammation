@@ -93,6 +93,9 @@ class Personnage:
         autre_personnage.nb_vie += self.niveau
         self.nb_vie += self.niveau
 
+    def degats(self, autre_personnage):
+        return self.niveau
+
     ## Définition des propriétés
     @property
     def initiative(self) -> int:
