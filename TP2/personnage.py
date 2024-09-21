@@ -1,125 +1,98 @@
 class Personnage:
-    """
-    Permet de créer un objet personnage
-    @method __init__ : Constructeur de la classe
-    @method __str__ : Affichage de l'objet
-    @method attaque(AutrePersonnage : Personnage) : str
-    @method combat(AutrePersonnage : Personnage) : str
-    @method soigne(AutrePersonnage : Personnage) : str
-    """
+    def __init__(self, pseudo: str, niveau: int = 1) -> None:
+        """
+        Initialise un nouveau personnage avec un pseudo et un niveau.
 
-    def __init__(self, pseudo : str, niveau : int = 1, nb_vie : int = 1, initiative : int = 1) -> None:
+        :param pseudo: Le pseudo du personnage.
+        :type pseudo: str
+        :param niveau: Le niveau du personnage, par défaut 1.
+        :type niveau: int
         """
-        Constructeur de la classe Personnage
-        :param pseudo
-        :type str
-        :param niveau
-        :type int
-        :param nb_vie
-        :type int
-        :param initiative
-        :type int
-        """
-    
+
         self.pseudo = pseudo
         self.niveau = niveau
-        self.nb_vie = nb_vie
-        self.initiative = initiative
-        
+        self.nb_vie = niveau
+        self.initiative = niveau
+
     def __str__(self) -> str:
         """
-        Methode de traitement de chaine de caractère
+        Retourne une représentation sous forme de chaîne de caractères du personnage.
+
+        :return: Une chaîne de caractères décrivant le personnage.
+        :rtype: str
         """
-        return f"Le personnage {self.pseudo} a {self.nb_vie} vie(s), il est de niveau {self.niveau}, et a une initiative de {self.initiative} !"
-        
+        return f"Le personnage {self.pseudo} a {self.nb_vie} vie(s), il est de niveau {self.niveau}, et a une initiative de {self.initiative}."
+
+    def degats(self) -> int:
+        """
+        Calcule les dégâts occasionnés par le personnage.
+
+        :return: Les dégâts occasionnés par le personnage.
+        :rtype: int
+        """
+        return self.niveau
+    
     def attaque(self, autre_personnage) -> str:
         """
-        Méthode pour attaquer un autre personnage.
-        :param autre_personnage: L'autre personnage à attaquer
+        Attaque un autre personnage et retourne le résultat de l'attaque.
+
+        :param autre_personnage: Le personnage attaqué.
         :type autre_personnage: Personnage
-        :return: Résultat de l'attaque
+        :return: Une chaîne de caractères décrivant le résultat de l'attaque.
         :rtype: str
         """
         result = ""
         if self.initiative > autre_personnage.initiative:
-            autre_personnage.nb_vie -= self.niveau
-            result += f"{self.pseudo} attaque {autre_personnage.pseudo} et lui inflige {self.niveau} dégâts.\n"
+            degats = self.degats()
+            autre_personnage.nb_vie -= degats
+            result += f"{self.pseudo} attaque {autre_personnage.pseudo} et lui inflige {degats} dégâts.\n"
             if autre_personnage.nb_vie > 0:
-                self.nb_vie -= autre_personnage.niveau
-                result += f"{autre_personnage.pseudo} contre-attaque et inflige {autre_personnage.niveau} dégâts à {self.pseudo}.\n"
+                contre_degats = autre_personnage.degats()
+                self.nb_vie -= contre_degats
+                result += f"{autre_personnage.pseudo} contre-attaque et inflige {contre_degats} dégâts à {self.pseudo}.\n"
         elif self.initiative < autre_personnage.initiative:
-            self.nb_vie -= autre_personnage.niveau
-            result += f"{autre_personnage.pseudo} attaque {self.pseudo} et lui inflige {autre_personnage.niveau} dégâts.\n"
+            degats = autre_personnage.degats()
+            self.nb_vie -= degats
+            result += f"{autre_personnage.pseudo} attaque {self.pseudo} et lui inflige {degats} dégâts.\n"
             if self.nb_vie > 0:
-                autre_personnage.nb_vie -= self.niveau
-                result += f"{self.pseudo} contre-attaque et inflige {self.niveau} dégâts à {autre_personnage.pseudo}.\n"
+                contre_degats = self.degats()
+                autre_personnage.nb_vie -= contre_degats
+                result += f"{self.pseudo} contre-attaque et inflige {contre_degats} dégâts à {autre_personnage.pseudo}.\n"
         else:
-            self.nb_vie -= autre_personnage.niveau
-            autre_personnage.nb_vie -= self.niveau
-            result += f"{self.pseudo} et {autre_personnage.pseudo} attaquent en même temps et s'infligent respectivement {self.niveau} et {autre_personnage.niveau} dégâts.\n"
+            degats = self.degats()
+            autre_personnage.nb_vie -= degats
+            self.nb_vie -= autre_personnage.degats()
+            result += f"Les deux personnages ont la même initiative et s'attaquent en même temps.\n"
 
-        if self.nb_vie <= 0:
-            result += f"{self.pseudo} est mort.\n"
-        if autre_personnage.nb_vie <= 0:
-            result += f"{autre_personnage.pseudo} est mort.\n"
-        
+        result += f"Après l'attaque, {self.pseudo} a {self.nb_vie} vie(s) et {autre_personnage.pseudo} a {autre_personnage.nb_vie} vie(s).\n"
         return result
 
     def combat(self, autre_personnage) -> str:
         """
-        Réalise un combat entre deux personnages
-        :param autre_personnage: L'autre personnage à combattre
+        Engage un combat avec un autre personnage jusqu'à ce que l'un des deux soit vaincu.
+
+        :param autre_personnage: Le personnage avec lequel combattre.
         :type autre_personnage: Personnage
-        :return: Résultat du combat
+        :return: Une chaîne de caractères décrivant le résultat du combat.
         :rtype: str
         """
         result = ""
         while self.nb_vie > 0 and autre_personnage.nb_vie > 0:
             result += self.attaque(autre_personnage)
             if self.nb_vie <= 0:
-                result += f"{self.pseudo} a perdu le combat contre {autre_personnage.pseudo}."
+                result += f"{self.pseudo} a perdu le combat contre {autre_personnage.pseudo}.\n"
                 return result
             if autre_personnage.nb_vie <= 0:
-                result += f"{autre_personnage.pseudo} a perdu le combat contre {self.pseudo}."
+                result += f"{autre_personnage.pseudo} a perdu le combat contre {self.pseudo}.\n"
                 return result
         return result
 
-    def soigne(self, autre_personnage) -> str:
-        if self.nb_vie <= 0:
-            return f"{self.pseudo} est mort, il ne peut pas soigner {autre_personnage.pseudo}."
-        if autre_personnage.nb_vie <= 0:
-            return f"{autre_personnage.pseudo} est mort, il ne peut pas être soigné par {self.pseudo}."
-        
-        autre_personnage.nb_vie += self.niveau
-        self.nb_vie += self.niveau
+    def soigne(self) -> str:
+        """
+        Soigne le personnage en lui restaurant ses points de vie à son niveau initial.
 
-    def degats(self, autre_personnage):
-        return self.niveau
-
-    ## Définition des propriétés
-    @property
-    def initiative(self) -> int:
-        return self.__initiative
-    @initiative.setter
-    def initiative(self, value : int) -> None:
-        if isinstance(value, int):
-            self.__initiative = value
-
-def main():
-    p1 = Personnage("Master", niveau=5, nb_vie=20, initiative=3)
-    p2 = Personnage("Slave", niveau=4, nb_vie=18, initiative=3)
-    print(p1)
-    print(p2)
-    print(p1.attaque(p2))
-    print(p2.attaque(p1))
-    print(p1)
-    print(p2)
-
-    p3 = Personnage("Master", niveau=5, nb_vie=20, initiative=3)
-    p4 = Personnage("Slave", niveau=4, nb_vie=18, initiative=3)
-    print(p3)
-    print(p4)
-    print(p3.combat(p4))
-
-if __name__ == "__main__":
-    main()
+        :return: Une chaîne de caractères indiquant que le personnage est soigné.
+        :rtype: str
+        """
+        self.nb_vie = self.niveau
+        return f"{self.pseudo} est soigné et retrouve {self.nb_vie} points de vie."
