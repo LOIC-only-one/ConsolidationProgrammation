@@ -14,18 +14,21 @@ class Rectangle:
         :param point: Point bas gauche du rectangle
         :param point_haut_droit: Optionnellement, point haut droit du rectangle
         """
-        if point_haut_droit is not None:
-            self.point = point
-            self.para_long_x = point_haut_droit.get_x - point.get_x
-            self.para_hauteur_y = point_haut_droit.get_y - point.get_y
-        else:
-            if point is None:
-                self.point = Point(0, 0)
-            else:
+        try:
+            if point_haut_droit is not None:
                 self.point = point
-            self.para_long_x = para_long_x
-            self.para_hauteur_y = para_hauteur_y
-
+                self.para_long_x = point_haut_droit.get_x - point.get_x
+                self.para_hauteur_y = point_haut_droit.get_y - point.get_y
+            else:
+                if point is None:
+                    self.point = Point(0, 0)
+                else:
+                    self.point = point
+                self.para_long_x = para_long_x
+                self.para_hauteur_y = para_hauteur_y
+        except TypeError:
+            return "Probleme avec les dimensions ou les points"
+        
     def Surface(self) -> float:
         """
         Calcule la surface d'un rectangle

@@ -6,9 +6,11 @@ class TriangleRect:
     """
 
     def __init__(self,l1:float,l2:float,point=Point(0,0)) -> None:
-        self.__l1 = l1
-        self.__l2 = l2
-        self.__point = point
+        try:
+            self.__l1 = l1
+            self.__l2 = l2
+        except TypeError:
+            return "Probleme avec les longueurs"
 
     def __str__(self) -> str:
         return f"Triangle rectangle: ({self.__l1}, {self.__l2})"

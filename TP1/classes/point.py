@@ -6,8 +6,11 @@ class Point:
     """
 
     def __init__(self, x : float = 0.0, y : float = 0.0) -> None:
-        self.__x = x
-        self.__y = y
+        try:
+            self.__x = x
+            self.__y = y
+        except TypeError:
+            return "Probleme avec les coordonnées x et y"
 
     def __str__(self) -> str:
         return f"Point: ({self.__x}, {self.__y})"
