@@ -1,40 +1,32 @@
-from point import Point
-import math
-class TriangleRect:
+def diviser(a, b):
     """
-    Créer un triangle rectangle
+    Effectue la division de deux nombres réels.
+
+    :param a: Le dividende.
+    :type a: float
+    :param b: Le diviseur.
+    :type b: float
+    :return: Le résultat de la division.
+    :rtype: float
     """
+    try:
+        if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+            raise TypeError("Les arguments doivent être des nombres réels (int ou float).")
+        
+        resultat = a / b
+        return resultat
 
-    def __init__(self,l1:float,l2:float,point=Point(0,0)) -> None:
-        try:
-            self.__l1 = l1
-            self.__l2 = l2
-        except TypeError:
-            return "Probleme avec les longueurs"
+    except ZeroDivisionError:
+        return "Erreur : Division par zéro."
+    except TypeError as e:
+        return f"Erreur de type : {e}"
+    except Exception as e:
+        return f"Une erreur inattendue s'est produite : {e}"
 
-    def __str__(self) -> str:
-        return f"Triangle rectangle: ({self.__l1}, {self.__l2})"
-    
-    def CalculHypothenuse(self) -> float:
-        """
-        Calcule l'hypothenuse du triangle rectangle
-
-        :param self: TriangleRect
-        :return: float
-        """
-        return math.sqrt(self.__l1**2 + self.__l2**2)
-    
-    def CalulPerimetre(self) -> float:
-        """
-        Calcule le périmètre du triangle rectangle
-
-        :param self: TriangleRect
-        :return: float
-        """
-        return self.__l1 + self.__l2 + self.CalculHypothenuse()
-    
+# Exemple d'utilisation
 if __name__ == "__main__":
-    t1 = TriangleRect(3,4)
-    print(t1)
-    print(t1.CalculHypothenuse())
-    print(t1.CalulPerimetre())
+    # Cas de test
+    print(diviser(10, 2))  # Devrait retourner 5.0
+    print(diviser(10, 0))  # Devrait retourner "Erreur : Division par zéro."
+    print(diviser(10, "a"))  # Devrait retourner "Erreur de type : Les arguments doivent être des nombres réels (int ou float)."
+    print(diviser("a", 2))  # Devrait retourner "Erreur de type : Les arguments doivent être des nombres réels (int ou float)."
