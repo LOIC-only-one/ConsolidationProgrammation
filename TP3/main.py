@@ -1,10 +1,16 @@
 from pokemon import Pokemon
 from pokemon_sportif import PokemonSportif
-from pokemon_casaniers import PokemonCasanier
+from pokemon import PokemonCasanier
 from pokemon_mers import PokemonMer
 from pokemonn_croix import PokemonCroisiere
 
 def main():
+    """Fonction principale du programme
+    
+    
+    :return: None
+    """    
+    
     # Question 3: Créer un ensemble de Pokémon de chacune des catégories
     p1 = PokemonCasanier("Bulbizarre", 6, 40, 4, 8)
     p2 = PokemonMer("Magicarpe", 6, 40, 2)
@@ -18,6 +24,7 @@ def main():
     for pokemon in tableau_pokemons:
         print(pokemon)
         print(pokemon.vitesse())
+
 
 if __name__ == "__main__":
     main()
